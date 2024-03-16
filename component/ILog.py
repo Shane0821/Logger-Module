@@ -28,22 +28,27 @@ class LogComponent:
         # Start the listener thread
         self.listener.start()
 
-    def write(self, message: str):
+    def write(self, message: str) -> datetime.datetime:
         """
         Writes a log message to the queue.
 
         Args:
             message (str): The log message to be written.
+
+        Returns:
+            datetime.datetime: The timestamp of the log message.
         """
 
         # If the log is stopped, do nothing
         if (self.stop_log):
-            pass
+            return timestamp
         
         # Get the current timestamp
         timestamp = datetime.datetime.now()
         # Put the message in the queue
         self.queue.put((timestamp, message))
+
+        return timestamp
 
     def stop(self, finish_writing: Optional[bool] = True):
         """

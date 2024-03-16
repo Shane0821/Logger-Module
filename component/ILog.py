@@ -4,7 +4,7 @@ import datetime
 import os
 from typing import Optional
 
-class ILog:
+class LogComponent:
     """
     This class is responsible for asynchronously logging messages to files.
     It creates a queue to store log messages, a listener thread to write messages to files,

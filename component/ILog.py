@@ -28,6 +28,16 @@ class LogComponent:
         # Start the listener thread
         self.listener.start()
 
+    def clear_logs(self):
+        """
+        Clears all the log files.
+        """
+
+        for file in os.listdir(self.path):
+            file_path = os.path.join(self.path, file)
+            if os.path.isfile(file_path):
+                os.unlink(file_path)
+
     def write(self, message: str) -> datetime.datetime:
         """
         Writes a log message to the queue.
@@ -38,13 +48,13 @@ class LogComponent:
         Returns:
             datetime.datetime: The timestamp of the log message.
         """
+        # Get the current timestamp
+        timestamp = datetime.datetime.now()
 
         # If the log is stopped, do nothing
         if (self.stop_log):
             return timestamp
         
-        # Get the current timestamp
-        timestamp = datetime.datetime.now()
         # Put the message in the queue
         self.queue.put((timestamp, message))
 

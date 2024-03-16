@@ -23,7 +23,7 @@ class LogComponent:
         # Flag to stop the log
         self.stop_log = False
         # Path to store log files
-        self.path = os.path.join(os.path.dirname(__file__), "logs")
+        self.path = os.path.join(os.path.dirname(__file__), "../logs")
 
         # Start the listener thread
         self.listener.start()
@@ -77,11 +77,11 @@ class LogComponent:
         # If the file does not exist, create it and write the message   
         if not os.path.exists(filename_with_timestamp):
             with open(filename_with_timestamp, 'w') as file:
-                file.write(f"{message}\n")
+                file.write(f"{timestamp.strftime('%H:%M:%S')}: {message}\n")
             return
         # If the file exists, append the message
         with open(filename_with_timestamp, 'a') as file:
-            file.write(f"{message}\n")
+            file.write(f"{timestamp.strftime('%H:%M:%S')}: {message}\n")
 
     def _finish_outstanding_logs(self):
         """

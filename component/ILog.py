@@ -77,11 +77,11 @@ class LogComponent:
         # If the file does not exist, create it and write the message   
         if not os.path.exists(filename_with_timestamp):
             with open(filename_with_timestamp, 'w') as file:
-                file.write(f"{timestamp}: {message}\n")
+                file.write(f"{message}\n")
             return
         # If the file exists, append the message
         with open(filename_with_timestamp, 'a') as file:
-            file.write(f"{timestamp}: {message}\n")
+            file.write(f"{message}\n")
 
     def _finish_outstanding_logs(self):
         """

@@ -1,0 +1,2 @@
+17:24:18: This is test message 1.
+17:24:23: This is test message 2.

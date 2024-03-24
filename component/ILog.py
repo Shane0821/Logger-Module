@@ -22,6 +22,9 @@ class LogComponent:
         # Thread to listen to the queue and write to file
         self.listener = threading.Thread(target=self._log)
 
+        self.lock = threading.Lock()
+        self.condition = threading.Condition(lock=self.lock)
+
         # Flag to stop the log
         self.stop_log = False
 
@@ -58,8 +61,14 @@ class LogComponent:
         if (self.stop_log):
             return timestamp
         
+        self.lock.acquire()
+
         # Put the message in the queue
         self.queue.put((timestamp, message))
+
+        self.condition.notify()
+
+        self.lock.release()
 
         return timestamp
 
@@ -73,6 +82,8 @@ class LogComponent:
         """
 
         self.stop_log = True
+
+        self.queue.put((None, None))
 
         # Wait for the listener thread to finish
         self.listener.join() 
@@ -110,6 +121,10 @@ class LogComponent:
         # Write all the messages in the queue to the file
         while not self.queue.empty():
             timestamp, message = self.queue.get()
+
+            if (timestamp == None or message == None):
+                continue
+
             self._write_to_file(timestamp, message)
 
     def _log(self):
@@ -120,8 +135,17 @@ class LogComponent:
         while True:
             if self.stop_log:
                 break
+
+            self.lock.acquire()
+        
             if self.queue.empty():
+                self.condition.wait()
+            
+            timestamp, message = self.queue.get()
+
+            self.lock.release()
+
+            if (timestamp == None or message == None):
                 continue
 
-            timestamp, message = self.queue.get()
             self._write_to_file(timestamp, message)

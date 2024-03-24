@@ -18,10 +18,13 @@ class LogComponent:
 
         # Queue to store log messages
         self.queue = queue.Queue()
+
         # Thread to listen to the queue and write to file
         self.listener = threading.Thread(target=self._log)
+
         # Flag to stop the log
         self.stop_log = False
+
         # Path to store log files
         self.path = os.path.join(os.path.dirname(__file__), "../logs")
 
@@ -94,6 +97,7 @@ class LogComponent:
             with open(filename_with_timestamp, 'w') as file:
                 file.write(f"{timestamp.strftime('%H:%M:%S')}: {message}\n")
             return
+        
         # If the file exists, append the message
         with open(filename_with_timestamp, 'a') as file:
             file.write(f"{timestamp.strftime('%H:%M:%S')}: {message}\n")

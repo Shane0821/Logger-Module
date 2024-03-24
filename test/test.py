@@ -57,6 +57,16 @@ class TestLogComponent(unittest.TestCase):
             actual = file.read()
         self.assertEqual(expected, actual)
 
+    def test_stop_without_delay_empty(self):
+        logger = LogComponent()
+        logger.clear_logs()
+
+        for i in range(10000):
+            logger.write(f"This is test message {i}.")
+        logger.stop(False)
+
+        self.assertTrue(not logger.queue.empty())
+
     def test_cross_date(self):
         logger = LogComponent()
         logger.clear_logs()

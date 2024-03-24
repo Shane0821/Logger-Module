@@ -8,9 +8,10 @@ from ILog import LogComponent
 
 logger = LogComponent()
 print("Logger Created.")
-logger.write("This is a test message.")
-time.sleep(5)
-logger.write("This is a test message+5.")
+
+for i in range(10000):
+    logger.write(f"This is a test message. {i}")
+
 logger.stop()
 print("Logger stopped.")
 logger.write("This is a test message.")
